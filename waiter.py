@@ -2,6 +2,7 @@
 import os
 import datetime
 import random
+import requests
 
 import discord
 import asyncio
@@ -22,6 +23,7 @@ client = discord.Client()
 connection = MongoClient()
 db = connection['waiter-db']
 
+chuck_fact_url = "https://api.chucknorris.io/jokes/random"
 sentences_collection = db['waiter-sentences']
 
 embed_color = 0x4e6f7b
@@ -38,13 +40,22 @@ async def on_message(message):
     n_sentences = sentences_list.count()
 
     # send messaged if mentionned or with probability
-    if discord.utils.find(lambda m: m.id == int(client.user.id), message.mentions) or random.uniform(0, 1) < 0.01:
+    if discord.utils.find(lambda m: m.id == int(client.user.id), message.mentions) or random.uniform(0, 1) < 0.02:
 
-        n_rand = random.randrange(n_sentences)
+        if 'chuck fact' in message.content.lower():
+            response = requests.get(chuck_fact_url).json()
 
-        await message.channel.send("<@{0}, {1}".format(message.author.id, sentences_list[n_rand]['sentence']))
+            embed = discord.Embed(
+                title='Why Chuck Norris is the best ?', 
+                description=response['value'], 
+                color=embed_color)
+            embed.set_thumbnail(url=response['icon_url'])
 
-    # add fact
+            await message.channel.send(embed=embed)
+
+        else:
+            n_rand = random.randrange(n_sentences)
+            await message.channel.send("<@{0}>, {1}".format(message.author.id, sentences_list[n_rand]['sentence']))
 
     # add new sentence for the bot
     if message.content.startswith('--waiter-add'):
