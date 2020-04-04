@@ -55,6 +55,7 @@ async def on_message(message):
 
         else:
             n_rand = random.randrange(n_sentences)
+            print('Waiter says', sentences_list[n_rand]['sentence']))
             await message.channel.send("<@{0}>, {1}".format(message.author.id, sentences_list[n_rand]['sentence']))
 
     # add new sentence for the bot
@@ -165,7 +166,6 @@ async def on_message(message):
                     value="\t`--waiter-delete 42`",
                     inline=False)
 
-            
             await message.author.send(embed=embed)
 
     # send all available commands of bot
@@ -184,21 +184,21 @@ async def on_message(message):
             value="\t`--waiter-add Something not stupid please!`",
             inline=False)
 
-        if message.author.id == int(CREATOR_ID):
-            embed.add_field(
-                value="`--waiter-list`",
-                name=":white_small_square: Gives information about all commands", 
-                inline=False)
+        # if message.author.id == int(CREATOR_ID):
+        #     embed.add_field(
+        #         value="`--waiter-list`",
+        #         name=":white_small_square: Gives information about all commands", 
+        #         inline=False)
             
-            embed.add_field(
-                value="`--waiter-delete {{sentence-id}}`",
-                name=":white_small_square: Remove a sentence using its id", 
-                inline=False)
+        #     embed.add_field(
+        #         value="`--waiter-delete {{sentence-id}}`",
+        #         name=":white_small_square: Remove a sentence using its id", 
+        #         inline=False)
 
-            embed.add_field(
-                name="\t__Example:__", 
-                value="\t`--waiter-delete 42`",
-                inline=False)
+        #     embed.add_field(
+        #         name="\t__Example:__", 
+        #         value="\t`--waiter-delete 42`",
+        #         inline=False)
         
         embed.add_field(
                 value="`--waiter-help`",
