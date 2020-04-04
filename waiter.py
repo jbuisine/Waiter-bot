@@ -69,7 +69,7 @@ async def on_message(message):
             print('Waiter says', sentences_list[n_rand]['sentence'])
 
             embed = discord.Embed(
-                description=sentences_list[n_rand]['sentence'], 
+                description="<@{0}>, {1}".format(message.author.id, sentences_list[n_rand]['sentence']), 
                 color=embed_color)
 
             await message.channel.send(embed=embed)
