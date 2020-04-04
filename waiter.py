@@ -55,7 +55,7 @@ async def on_message(message):
 
         else:
             n_rand = random.randrange(n_sentences)
-            print('Waiter says', sentences_list[n_rand]['sentence']))
+            print('Waiter says', sentences_list[n_rand]['sentence'])
             await message.channel.send("<@{0}>, {1}".format(message.author.id, sentences_list[n_rand]['sentence']))
 
     # add new sentence for the bot
@@ -120,7 +120,7 @@ async def on_message(message):
                     value="{0}".format(sentence['sentence']),
                     inline=False)
 
-            await message.author.send(embed=embed)
+            await message.channel.send(embed=embed)
     
      # print all available sentence of the bot
     if message.content.startswith('--waiter-delete'):
@@ -166,7 +166,7 @@ async def on_message(message):
                     value="\t`--waiter-delete 42`",
                     inline=False)
 
-            await message.author.send(embed=embed)
+            await message.channel.send(embed=embed)
 
     # send all available commands of bot
     if message.content.startswith('--waiter-help'):
@@ -207,7 +207,7 @@ async def on_message(message):
             
         embed.set_footer(text="That was a pleasure!") #if you like to
 
-        await message.author.send(embed=embed)
+        await message.channel.send(embed=embed)
 
 
 @client.event
