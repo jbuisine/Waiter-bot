@@ -42,21 +42,9 @@ async def on_message(message):
     # send messaged if mentionned or with probability
     if discord.utils.find(lambda m: m.id == int(client.user.id), message.mentions) or random.uniform(0, 1) < 0.02:
 
-        if 'chuck fact' in message.content.lower():
-            response = requests.get(chuck_fact_url).json()
-
-            embed = discord.Embed(
-                title='Why Chuck Norris is the best ?', 
-                description=response['value'], 
-                color=embed_color)
-            embed.set_thumbnail(url=response['icon_url'])
-
-            await message.channel.send(embed=embed)
-
-        else:
-            n_rand = random.randrange(n_sentences)
-            print('Waiter says', sentences_list[n_rand]['sentence'])
-            await message.channel.send("<@{0}>, {1}".format(message.author.id, sentences_list[n_rand]['sentence']))
+        n_rand = random.randrange(n_sentences)
+        print('Waiter says', sentences_list[n_rand]['sentence'])
+        await message.channel.send("<@{0}>, {1}".format(message.author.id, sentences_list[n_rand]['sentence']))
 
     # add new sentence for the bot
     if message.content.startswith('--waiter-add'):
@@ -122,6 +110,18 @@ async def on_message(message):
 
             await message.channel.send(embed=embed)
     
+    if message.content.startswith('--waiter-chuck-fact'):
+
+        response = requests.get(chuck_fact_url).json()
+
+        embed = discord.Embed(
+            title='Why Chuck Norris is the best ?', 
+            description=response['value'], 
+            color=embed_color)
+        embed.set_thumbnail(url=response['icon_url'])
+
+        await message.channel.send(embed=embed)
+        
      # print all available sentence of the bot
     if message.content.startswith('--waiter-delete'):
 
@@ -182,6 +182,10 @@ async def on_message(message):
         embed.add_field(
             name="\t__Example:__", 
             value="\t`--waiter-add Something not stupid please!`",
+            inline=False)
+        embed.add_field(
+            value="`--waiter-chuck-fact`",
+            name=":white_small_square: True fact of Chuck Norris displayed!",
             inline=False)
 
         # if message.author.id == int(CREATOR_ID):
