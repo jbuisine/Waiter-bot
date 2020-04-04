@@ -41,6 +41,8 @@ async def on_message(message):
     sentences_list = sentences_collection.find()
     n_sentences = sentences_list.count()
 
+    user_creator = discord.utils.find(lambda m: m.id == int(CREATOR_ID), client.users)
+
     # send messaged if mentionned or with probability
     if discord.utils.find(lambda m: m.id == int(client.user.id), message.mentions) or random.uniform(0, 1) < 0.02:
 
@@ -67,7 +69,6 @@ async def on_message(message):
             print('Waiter says', sentences_list[n_rand]['sentence'])
 
             embed = discord.Embed(
-                title=':open_hands:  Hi {0} :open_hands:'.format(str(message.author.name)), 
                 description=sentences_list[n_rand]['sentence'], 
                 color=embed_color)
 
@@ -113,7 +114,6 @@ async def on_message(message):
             embed.set_footer(text="Thanks a lot for your contributions!") 
         
         else:
-            user_creator = discord.utils.find(lambda m: m.id == int(CREATOR_ID), client.users)
 
             embed = discord.Embed(
                 title=':warning: Unvalid use of command :warning:', 
