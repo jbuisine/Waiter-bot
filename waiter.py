@@ -4,6 +4,7 @@ import datetime
 import random
 import requests
 
+import pymongo
 import discord
 import asyncio
 import time
@@ -12,6 +13,7 @@ from dotenv import load_dotenv
 
 # db connection
 from pymongo import MongoClient
+import pymongo
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -42,9 +44,34 @@ async def on_message(message):
     # send messaged if mentionned or with probability
     if discord.utils.find(lambda m: m.id == int(client.user.id), message.mentions) or random.uniform(0, 1) < 0.02:
 
-        n_rand = random.randrange(n_sentences)
-        print('Waiter says', sentences_list[n_rand]['sentence'])
-        await message.channel.send("<@{0}>, {1}".format(message.author.id, sentences_list[n_rand]['sentence']))
+        if n_sentences == 0:
+            embed = discord.Embed(
+                title=':warning: No sentences added :warning:', 
+                description='It seems I have no knowledge!', 
+                color=embed_color)
+            embed.add_field(
+                name=":white_small_square: If you want to add me knowledge (please not stupid thing), please use", 
+                value="`--waiter-add {{your-sentence}}`", 
+                inline=False)
+            embed.add_field(
+                name="\t__Example:__", 
+                value="\t`--waiter-add The sky is blue!`",
+                inline=False)
+            embed.set_footer(text="Do not hesitate to contact {0} for further information".format(str(user_creator))) 
+
+            await message.channel.send(embed=embed)
+
+        else:
+            n_rand = random.randrange(n_sentences)
+
+            print('Waiter says', sentences_list[n_rand]['sentence'])
+
+            embed = discord.Embed(
+                title=':open_hands:  Hi {0} :open_hands:'.format(str(message.author.name)), 
+                description=sentences_list[n_rand]['sentence'], 
+                color=embed_color)
+
+            await message.channel.send(embed=embed)
 
     # add new sentence for the bot
     if message.content.startswith('--waiter-add'):
@@ -55,9 +82,22 @@ async def on_message(message):
 
         # check if sentence is correct
         if len(sentence) > 0:
+            
+            print('here')
+            last_sentence = sentences_collection.find_one(
+                    #{'doc_id': doc_id},
+                    sort=[( '_id', pymongo.DESCENDING )]
+                )
+
+            if last_sentence:
+                new_sentence_id = int(last_sentence['sentence_id']) + 1
+            else:
+                new_sentence_id = 0
+
+            print(new_sentence_id)
 
             sentences_collection.insert_one({
-                'sentence_id': n_sentences, 
+                'sentence_id': new_sentence_id, 
                 'sentence': str(sentence), 
                 'added_by': message.author.id,
                 'added_by_username': str(message.author)})
