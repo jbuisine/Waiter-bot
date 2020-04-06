@@ -144,7 +144,7 @@ async def on_message(message):
 
             sentences = sentences_list
 
-            if len(sentences) > 20:
+            if n_sentences> 20:
                 sentences = sentences[-20:]
             
             for sentence in sentences:
