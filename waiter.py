@@ -142,7 +142,12 @@ async def on_message(message):
                 description='All available sentence',
                 color=embed_color)
 
-            for sentence in sentences_list:
+            setences = sentences_list
+
+            if sentences > 20:
+                sentences = sentences[-20:]
+            
+            for sentence in sentences:
                 embed.add_field(
                     name="`{0}`, sentence added by {1}".format(sentence['sentence_id'], sentence['added_by_username']), 
                     value="{0}".format(sentence['sentence']),
