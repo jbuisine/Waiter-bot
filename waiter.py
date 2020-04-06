@@ -142,7 +142,7 @@ async def on_message(message):
                 description='All available sentence',
                 color=embed_color)
 
-            setences = sentences_list
+            sentences = sentences_list
 
             if len(sentences) > 20:
                 sentences = sentences[-20:]
