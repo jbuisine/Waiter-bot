@@ -29,6 +29,7 @@ chuck_fact_url = "https://api.chucknorris.io/jokes/random"
 sentences_collection = db['waiter-sentences']
 
 embed_color = 0x4e6f7b
+n_display_sentences = 20
 
 
 @client.event
@@ -144,8 +145,8 @@ async def on_message(message):
 
             sentences = sentences_list
 
-            if n_sentences> 20:
-                sentences = sentences[-20:]
+            if n_sentences > n_display_sentences:
+                sentences = sentences.sort('_id', -1).limit(n_display_sentences)
             
             for sentence in sentences:
                 embed.add_field(
