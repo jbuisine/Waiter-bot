@@ -1,4 +1,4 @@
-# SIN3D-Bot
+# Waiter-Bot
 
 ## Description
 
